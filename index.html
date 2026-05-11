@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haji Shahnawaz Family Resturant - Menu</title>
+    <title>Haji Shahnawaz Family Restaurant - Menu</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,6 +34,14 @@
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
+        }
+
+        /* LOCK BODY SCROLL WHEN MODAL OPEN */
+        body.modal-open {
+            overflow: hidden !important;
+            position: fixed;
+            width: 100%;
+            height: 100%;
         }
 
         body::before {
@@ -514,6 +522,7 @@
             background-color: rgba(0, 0, 0, 0.88);
             backdrop-filter: blur(6px);
             animation: modalFadeIn 0.3s ease;
+            overflow: hidden;
         }
 
         @keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -529,9 +538,10 @@
             border: 1px solid rgba(212, 168, 83, 0.2);
             animation: modalSlideUp 0.4s ease;
             position: relative;
-            overflow: hidden;
             max-height: 92vh;
-            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
         @keyframes modalSlideUp {
@@ -546,12 +556,24 @@
             height: 1px;
             background: linear-gradient(90deg, transparent, var(--gold), transparent);
             opacity: 0.5;
+            z-index: 5;
         }
 
-        .modal-content::-webkit-scrollbar { width: 4px; }
-        .modal-content::-webkit-scrollbar-track { background: transparent; }
-        .modal-content::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 2px; }
+        /* SCROLLABLE AREA INSIDE MODAL */
+        .modal-scroll-area {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+            padding-right: 4px;
+        }
 
+        .modal-scroll-area::-webkit-scrollbar { width: 4px; }
+        .modal-scroll-area::-webkit-scrollbar-track { background: transparent; }
+        .modal-scroll-area::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 2px; }
+
+        /* OLD SCROLLBAR STYLES NOW UNUSED ON modal-content */
         .modal-content h2 {
             color: var(--text-gold);
             margin-bottom: 22px;
@@ -560,6 +582,7 @@
             letter-spacing: 2px;
             position: relative;
             z-index: 2;
+            flex-shrink: 0;
         }
 
         .close-modal {
@@ -609,12 +632,13 @@
             transform: translateX(4px);
         }
 
-        .cart-item-details { flex: 1; }
+        .cart-item-details { flex: 1; min-width: 0; }
 
         .cart-item-name {
             font-weight: 700;
             color: var(--text-white);
             font-size: 12px;
+            word-break: break-word;
         }
 
         .cart-item-price { color: var(--gold); font-weight: 800; font-size: 12px; }
@@ -633,6 +657,8 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             font-family: 'Montserrat', sans-serif;
+            flex-shrink: 0;
+            margin-left: 8px;
         }
 
         .remove-btn:hover {
@@ -648,6 +674,7 @@
             border: 1px solid rgba(212, 168, 83, 0.15);
             position: relative;
             z-index: 1;
+            flex-shrink: 0;
         }
 
         .summary-line {
@@ -676,6 +703,7 @@
             position: relative;
             z-index: 1;
             margin-bottom: 18px;
+            flex-shrink: 0;
         }
 
         .table-section-title {
@@ -759,7 +787,7 @@
         .table-error-msg.visible { display: block; }
 
         /* ============ FORM ============ */
-        .form-group { margin: 12px 0; position: relative; z-index: 1; }
+        .form-group { margin: 12px 0; position: relative; z-index: 1; flex-shrink: 0; }
 
         .form-group input {
             width: 100%;
@@ -804,6 +832,7 @@
             position: relative;
             z-index: 1;
             font-family: 'Montserrat', sans-serif;
+            flex-shrink: 0;
         }
 
         .checkout-btn:hover {
@@ -1103,7 +1132,7 @@
         @media (max-width: 768px) {
             header h1 { font-size: 32px; }
             header { padding: 45px 16px 38px; }
-            .modal-content { margin: 18% auto; width: 95%; padding: 26px; }
+            .modal-content { margin: 2% auto; max-height: 96vh; }
             .category-btn { height: 105px; }
             .category-btn .cat-label { font-size: 15px; letter-spacing: 1.5px; }
             .cart-fab { width: 58px; height: 58px; font-size: 24px; bottom: 24px; right: 16px; }
@@ -1114,7 +1143,7 @@
             header h1 { font-size: 26px; letter-spacing: 0.5px; }
             header p { font-size: 10px; letter-spacing: 1px; }
             .company-badge { font-size: 7px; padding: 8px 14px; top: 14px; right: 14px; letter-spacing: 2px; }
-            .modal-content { margin: 24% auto; width: 96%; padding: 22px; }
+            .modal-content { margin: 0; width: 100%; max-height: 100vh; border-radius: 0; padding: 22px; }
             .category-btn { height: 88px; margin-bottom: 8px; }
             .category-btn .cat-img { width: 36%; }
             .category-btn .cat-info { padding: 10px 14px 10px 8px; }
@@ -1147,7 +1176,7 @@
         <div class="header-ornament top-left"></div>
         <div class="header-ornament top-right"></div>
         <div class="company-badge">MENU</div>
-        <h1>Haji Shahnawaz<br>Family Resturant</h1>
+        <h1>Haji Shahnawaz<br>Family Restaurant</h1>
         <div class="header-divider"></div>
         <p>The Best Memories Are Made Around The Table</p>
     </header>
@@ -1169,7 +1198,7 @@
         </button>
         <div id="c1" class="items-container">
             <div class="item-card"><div class="details"><h4>Chicken Karahi</h4></div><div class="price-box"><span class="price">F 1800/H 950</span></div><div class="btn-box"><select class="qty-input"><option value="1800">Full 1800</option><option value="950">Half 950</option></select><button class="order-btn" onclick="addToCartSelect(this,'Chicken Karahi')">Add</button></div></div>
-            <div class="item-card"><div class="details"><h4>Chicken White Karahi</h4></div><div class="price-box"><span class="price">F 2000/H 1050</span></div><div class="btn-box"><select class="qty-input"><option value="2000">Full 2000</option><option value="1050">Half 1050</option></select><button class="order-btn" onclick="addToCartSelect(this,'Chicken White Karhai')">Add</button></div></div>
+            <div class="item-card"><div class="details"><h4>Chicken White Karahi</h4></div><div class="price-box"><span class="price">F 2000/H 1050</span></div><div class="btn-box"><select class="qty-input"><option value="2000">Full 2000</option><option value="1050">Half 1050</option></select><button class="order-btn" onclick="addToCartSelect(this,'Chicken White Karahi')">Add</button></div></div>
             <div class="item-card"><div class="details"><h4>Chicken Achari Karahi</h4></div><div class="price-box"><span class="price">F 1900/H 1000</span></div><div class="btn-box"><select class="qty-input"><option value="1900">Full 1900</option><option value="1000">Half 1000</option></select><button class="order-btn" onclick="addToCartSelect(this,'Chicken Achari Karahi')">Add</button></div></div>
             <div class="item-card"><div class="details"><h4>Beef Karahi</h4></div><div class="price-box"><span class="price">F 2500/H 1300</span></div><div class="btn-box"><select class="qty-input"><option value="2500">Full 2500</option><option value="1300">Half 1300</option></select><button class="order-btn" onclick="addToCartSelect(this,'Beef Karahi')">Add</button></div></div>
             <div class="item-card"><div class="details"><h4>Kabab Masala (4 Kabab)</h4></div><div class="price-box"><span class="price">700</span></div><div class="btn-box"><input type="number" class="qty-input" min="1" value="1"><button class="order-btn" onclick="addToCart('Kabab Masala (4 Kabab)', 700)">Add</button></div></div>
@@ -1352,7 +1381,7 @@
     <!-- ============ DEALS SECTION ============ -->
     <div class="deals-section">
         <div class="deals-header">
-            <div class="deals-header-icon">🔥</div>
+            <div class="deals-header-icon">⚪</div>
             <h2>Hot Deals</h2>
             <p>Save Big With Our Exclusive Combos</p>
             <div class="deals-divider"></div>
@@ -1502,105 +1531,321 @@
 </button>
 
 <!-- Cart Modal -->
-<div id="cartModal" class="modal" onclick="if(event.target===this)closeCart()">
-    <div class="modal-content" onclick="event.stopPropagation()">
+<div id="cartModal" class="modal">
+    <div class="modal-content">
         <span class="close-modal" onclick="closeCart()">&times;</span>
         <h2>🛒 Your Order</h2>
-        <div id="cartItems"></div>
-        <div class="cart-summary">
-            <div class="summary-line"><span>Subtotal:</span><span id="subtotal">Rs.0</span></div>
-            <div class="summary-line"><span>Delivery Fee:</span><span id="deliveryFee">Rs.0</span></div>
-            <div class="total-line"><span>Total:</span><span id="totalPrice">Rs.0</span></div>
-        </div>
-        <div class="table-section">
-            <div class="table-section-title"><i class="fas fa-chair"></i> Table Number <span class="required-star">*</span></div>
-            <div class="table-row">
-                <div class="table-box">
-                    <label>Indoors (S1–S19)</label>
-                    <select id="tableS"><option value="">-- Select --</option></select>
-                </div>
-                <div class="table-box">
-                    <label>Outdoors (F1–F20)</label>
-                    <select id="tableF"><option value="">-- Select --</option></select>
-                </div>
+        <div class="modal-scroll-area">
+            <div id="cartItems"></div>
+            <div class="cart-summary">
+                <div class="summary-line"><span>Subtotal:</span><span id="subtotal">Rs.0</span></div>
+                <div class="summary-line"><span>Delivery Fee:</span><span id="deliveryFee">Rs.0</span></div>
+                <div class="total-line"><span>Total:</span><span id="totalPrice">Rs.0</span></div>
             </div>
-            <div class="table-error-msg" id="tableError"><i class="fas fa-exclamation-triangle"></i> Please select a table number</div>
+            <div class="table-section">
+                <div class="table-section-title"><i class="fas fa-chair"></i> Table Number <span class="required-star">*</span></div>
+                <div class="table-row">
+                    <div class="table-box">
+                        <label>Indoors (S1–S19)</label>
+                        <select id="tableS"><option value="">-- Select --</option></select>
+                    </div>
+                    <div class="table-box">
+                        <label>Outdoors (F1–F20)</label>
+                        <select id="tableF"><option value="">-- Select --</option></select>
+                    </div>
+                </div>
+                <div class="table-error-msg" id="tableError"><i class="fas fa-exclamation-triangle"></i> Please select a table number</div>
+            </div>
+            <div class="form-group"><input type="text" id="customerName" placeholder="Your Full Name"></div>
+            <div class="form-group"><input type="tel" id="customerPhone" placeholder="Phone Number"></div>
+            <button class="checkout-btn" onclick="sendToWhatsApp()">Send Order via WhatsApp</button>
         </div>
-        <div class="form-group"><input type="text" id="customerName" placeholder="Your Full Name"></div>
-        <div class="form-group"><input type="tel" id="customerPhone" placeholder="Phone Number"></div>
-        <button class="checkout-btn" onclick="sendToWhatsApp()">Send Order via WhatsApp</button>
     </div>
 </div>
 
 <script>
+    // ===== TABLE SELECTORS =====
     (function(){
-        const tS=document.getElementById('tableS'),tF=document.getElementById('tableF');
-        for(let i=1;i<=19;i++){const o=document.createElement('option');o.value='S'+i;o.textContent='S'+i;tS.appendChild(o);}
-        for(let i=1;i<=20;i++){const o=document.createElement('option');o.value='F'+i;o.textContent='F'+i;tF.appendChild(o);}
-        tS.onchange=function(){if(this.value){tF.value='';document.getElementById('tableError').classList.remove('visible');}};
-        tF.onchange=function(){if(this.value){tS.value='';document.getElementById('tableError').classList.remove('visible');}};
+        var tS = document.getElementById('tableS');
+        var tF = document.getElementById('tableF');
+        for (var i = 1; i <= 19; i++) {
+            var o = document.createElement('option');
+            o.value = 'S' + i;
+            o.textContent = 'S' + i;
+            tS.appendChild(o);
+        }
+        for (var i = 1; i <= 20; i++) {
+            var o = document.createElement('option');
+            o.value = 'F' + i;
+            o.textContent = 'F' + i;
+            tF.appendChild(o);
+        }
+        tS.onchange = function() {
+            if (this.value) {
+                tF.value = '';
+                document.getElementById('tableError').classList.remove('visible');
+            }
+        };
+        tF.onchange = function() {
+            if (this.value) {
+                tS.value = '';
+                document.getElementById('tableError').classList.remove('visible');
+            }
+        };
     })();
 
-    let cart=[];
-    const DELIVERY_FEE=0,WHATSAPP_NUMBER="923061346466";
+    // ===== CART STATE =====
+    var cart = [];
+    var DELIVERY_FEE = 0;
+    var WHATSAPP_NUMBER = "923003397614";
+    var scrollPosY = 0;
 
-    function addToCart(n,p){const b=event.target,q=parseInt(b.parentElement.querySelector('.qty-input').value)||1;if(q<=0){alert('Enter valid quantity');return;}cart.push({name:n,price:p,quantity:q});updateCart();flash(b);}
-    function addToCartSelect(b,n){const s=b.parentElement.querySelector('.qty-input'),p=parseInt(s.value);if(isNaN(p)||p<=0)return;cart.push({name:n+' ('+s.options[s.selectedIndex].text+')',price:p,quantity:1});updateCart();flash(b);}
-    function flash(b){b.textContent='✓';b.classList.add('added');setTimeout(()=>{b.textContent='Add';b.classList.remove('added');},1000);}
+    // ===== BODY SCROLL LOCK =====
+    function lockBodyScroll() {
+        scrollPosY = window.scrollY || window.pageYOffset;
+        document.body.classList.add('modal-open');
+        document.body.style.top = '-' + scrollPosY + 'px';
+    }
 
+    function unlockBodyScroll() {
+        document.body.classList.remove('modal-open');
+        document.body.style.top = '';
+        window.scrollTo(0, scrollPosY);
+    }
+
+    // ===== ADD TO CART (number input) =====
+    function addToCart(n, p) {
+        var b = event.target;
+        var q = parseInt(b.parentElement.querySelector('.qty-input').value) || 1;
+        if (q <= 0) { alert('Enter valid quantity'); return; }
+        cart.push({ name: n, price: p, quantity: q });
+        updateCart();
+        flash(b);
+    }
+
+    // ===== ADD TO CART (select dropdown) =====
+    function addToCartSelect(b, n) {
+        var s = b.parentElement.querySelector('.qty-input');
+        var p = parseInt(s.value);
+        if (isNaN(p) || p <= 0) return;
+        cart.push({ name: n + ' (' + s.options[s.selectedIndex].text + ')', price: p, quantity: 1 });
+        updateCart();
+        flash(b);
+    }
+
+    // ===== FLASH BUTTON =====
+    function flash(b) {
+        b.textContent = '✓';
+        b.classList.add('added');
+        setTimeout(function() {
+            b.textContent = 'Add';
+            b.classList.remove('added');
+        }, 1000);
+    }
+
+    // ===== ADD DEAL TO CART =====
     function addDealToCart(btn, name, price) {
-        cart.push({name: name, price: price, quantity: 1});
+        cart.push({ name: name, price: price, quantity: 1 });
         updateCart();
         btn.innerHTML = '<i class="fas fa-check"></i> Added';
         btn.classList.add('added');
-        setTimeout(()=>{
+        setTimeout(function() {
             btn.innerHTML = '<i class="fas fa-cart-plus"></i> Add';
             btn.classList.remove('added');
         }, 1200);
     }
 
-    function updateCart(){const c=cart.reduce((s,i)=>s+i.quantity,0),e=document.getElementById('cartCount');e.textContent=c;e.style.display=c>0?'flex':'none';}
-    function openCart(){document.getElementById('cartModal').style.display='block';displayCart();}
-    function closeCart(){document.getElementById('cartModal').style.display='none';}
-
-    function displayCart(){
-        const d=document.getElementById('cartItems'),s=document.getElementById('subtotal'),t=document.getElementById('totalPrice');
-        if(!cart.length){d.innerHTML='<div class="empty-cart">Your cart is empty</div>';s.textContent='Rs.0';t.textContent='Rs.0';return;}
-        let h='',sub=0;
-        cart.forEach((i,x)=>{const tot=i.price*i.quantity;sub+=tot;h+='<div class="cart-item"><div class="cart-item-details"><div class="cart-item-name">'+i.name+'</div><div class="cart-item-qty">Qty: '+i.quantity+' × Rs.'+i.price+' = Rs.'+tot+'</div></div><button class="remove-btn" onclick="removeFromCart('+x+')">Remove</button></div>';});
-        d.innerHTML=h;s.textContent='Rs.'+sub;t.textContent='Rs.'+(sub+DELIVERY_FEE);
+    // ===== UPDATE CART COUNT =====
+    function updateCart() {
+        var c = cart.reduce(function(s, i) { return s + i.quantity; }, 0);
+        var e = document.getElementById('cartCount');
+        e.textContent = c;
+        e.style.display = c > 0 ? 'flex' : 'none';
     }
 
-    function removeFromCart(x){cart.splice(x,1);updateCart();displayCart();}
+    // ===== OPEN CART =====
+    function openCart() {
+        lockBodyScroll();
+        document.getElementById('cartModal').style.display = 'block';
+        displayCart();
+        // Scroll modal scroll area to top
+        var scrollArea = document.querySelector('.modal-scroll-area');
+        if (scrollArea) scrollArea.scrollTop = 0;
+    }
 
-    function sendToWhatsApp(){
-        const n=document.getElementById('customerName').value.trim(),
-              p=document.getElementById('customerPhone').value.trim(),
-              tS=document.getElementById('tableS').value,tF=document.getElementById('tableF').value,
-              tb=tS||tF;
+    // ===== CLOSE CART =====
+    function closeCart() {
+        document.getElementById('cartModal').style.display = 'none';
+        unlockBodyScroll();
+    }
+
+    // ===== CLOSE MODAL ON BACKDROP CLICK =====
+    document.getElementById('cartModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeCart();
+        }
+    });
+
+    // ===== PREVENT SCROLL LEAK FROM MODAL =====
+    document.querySelector('.modal-scroll-area').addEventListener('touchmove', function(e) {
+        var el = this;
+        var isScrollable = el.scrollHeight > el.clientHeight;
+        if (!isScrollable) {
+            e.preventDefault();
+            return;
+        }
+        var scrollTop = el.scrollTop;
+        var scrollHeight = el.scrollHeight;
+        var clientHeight = el.clientHeight;
+        if (scrollTop <= 0 && e.touches[0].clientY > (e.touches[0].clientY + 1)) {
+            e.preventDefault();
+        }
+        if ((scrollTop + clientHeight) >= scrollHeight && e.touches[0].clientY < (e.touches[0].clientY - 1)) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+
+    // ===== DISPLAY CART =====
+    function displayCart() {
+        var d = document.getElementById('cartItems');
+        var s = document.getElementById('subtotal');
+        var t = document.getElementById('totalPrice');
+
+        if (!cart.length) {
+            d.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+            s.textContent = 'Rs.0';
+            t.textContent = 'Rs.0';
+            return;
+        }
+
+        var h = '';
+        var sub = 0;
+
+        cart.forEach(function(i, x) {
+            var tot = i.price * i.quantity;
+            sub += tot;
+            h += '<div class="cart-item">' +
+                '<div class="cart-item-details">' +
+                '<div class="cart-item-name">' + i.name + '</div>' +
+                '<div class="cart-item-qty">Qty: ' + i.quantity + ' × Rs.' + i.price + ' = Rs.' + tot + '</div>' +
+                '</div>' +
+                '<button class="remove-btn" onclick="removeFromCart(' + x + ')">Remove</button>' +
+                '</div>';
+        });
+
+        d.innerHTML = h;
+        s.textContent = 'Rs.' + sub;
+        t.textContent = 'Rs.' + (sub + DELIVERY_FEE);
+    }
+
+    // ===== REMOVE FROM CART =====
+    function removeFromCart(x) {
+        cart.splice(x, 1);
+        updateCart();
+        displayCart();
+    }
+
+    // ===== SEND TO WHATSAPP =====
+    function sendToWhatsApp() {
+        var n = document.getElementById('customerName').value.trim();
+        var p = document.getElementById('customerPhone').value.trim();
+        var tS = document.getElementById('tableS').value;
+        var tF = document.getElementById('tableF').value;
+        var tb = tS || tF;
+
+        // Clear previous errors
         document.getElementById('customerName').classList.remove('error-shake');
         document.getElementById('customerPhone').classList.remove('error-shake');
         document.getElementById('tableS').classList.remove('error-shake');
         document.getElementById('tableF').classList.remove('error-shake');
         document.getElementById('tableError').classList.remove('visible');
-        if(!tb){document.getElementById('tableError').classList.add('visible');document.getElementById('tableS').classList.add('error-shake');document.getElementById('tableF').classList.add('error-shake');return;}
-        if(!n||n.length<2){alert('Please enter your name');document.getElementById('customerName').classList.add('error-shake');return;}
-        if(!p||p.length<10){alert('Please enter a valid phone number');document.getElementById('customerPhone').classList.add('error-shake');return;}
-        if(!cart.length){alert('Your cart is empty');return;}
-        let m='*HAJI SHAHNAWAZ FAMILY RESTAURANT*\n'+'─'.repeat(32)+'\n\n*TABLE:* '+tb+'\n\n*NAME:* '+n+'\n*PHONE:* '+p+'\n\n*ORDER:*\n'+'─'.repeat(32)+'\n';
-        let sub=0;
-        cart.forEach((i,x)=>{const t=i.price*i.quantity;sub+=t;m+=(x+1)+'. '+i.name+'\n   Qty '+i.quantity+' × Rs.'+i.price+' = Rs.'+t+'\n';});
-        m+='\n'+'─'.repeat(32)+'\n*TOTAL: Rs.'+(sub+DELIVERY_FEE)+'*\n\nThank you for ordering!';
-        window.open('https://wa.me/'+WHATSAPP_NUMBER+'?text='+encodeURIComponent(m),'_blank');
-        setTimeout(()=>{cart=[];document.getElementById('customerName').value='';document.getElementById('customerPhone').value='';document.getElementById('tableS').value='';document.getElementById('tableF').value='';updateCart();closeCart();},800);
+
+        // Validate table
+        if (!tb) {
+            document.getElementById('tableError').classList.add('visible');
+            document.getElementById('tableS').classList.add('error-shake');
+            document.getElementById('tableF').classList.add('error-shake');
+            return;
+        }
+
+        // Validate name
+        if (!n || n.length < 2) {
+            alert('Please enter your name');
+            document.getElementById('customerName').classList.add('error-shake');
+            return;
+        }
+
+        // Validate phone
+        if (!p || p.length < 10) {
+            alert('Please enter a valid phone number');
+            document.getElementById('customerPhone').classList.add('error-shake');
+            return;
+        }
+
+        // Validate cart
+        if (!cart.length) {
+            alert('Your cart is empty');
+            return;
+        }
+
+        // Build WhatsApp message
+        var m = '*HAJI SHAHNAWAZ FAMILY RESTAURANT*\n' +
+            '──────────────────────────\n\n' +
+            '*TABLE:* ' + tb + '\n\n' +
+            '*NAME:* ' + n + '\n' +
+            '*PHONE:* ' + p + '\n\n' +
+            '*ORDER:*\n' +
+            '──────────────────────────\n';
+
+        var sub = 0;
+        cart.forEach(function(i, x) {
+            var tot = i.price * i.quantity;
+            sub += tot;
+            m += (x + 1) + '. ' + i.name + '\n' +
+                '   Qty ' + i.quantity + ' × Rs.' + i.price + ' = Rs.' + tot + '\n';
+        });
+
+        m += '\n──────────────────────────\n' +
+            '*TOTAL: Rs.' + (sub + DELIVERY_FEE) + '*\n\n' +
+            'Thank you for ordering! 🙏';
+
+        // Open WhatsApp
+        var waURL = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(m);
+        window.open(waURL, '_blank');
+
+        // Reset after sending
+        setTimeout(function() {
+            cart = [];
+            document.getElementById('customerName').value = '';
+            document.getElementById('customerPhone').value = '';
+            document.getElementById('tableS').value = '';
+            document.getElementById('tableF').value = '';
+            updateCart();
+            closeCart();
+        }, 800);
     }
 
-    function toggleCat(id,btn){
-        const c=document.getElementById(id),allB=document.querySelectorAll('.category-btn'),allC=document.querySelectorAll('.items-container');
-        if(c.style.display==="block"){c.style.display="none";btn.classList.remove('active');}
-        else{allC.forEach(x=>x.style.display='none');allB.forEach(x=>x.classList.remove('active'));c.style.display="block";btn.classList.add('active');setTimeout(()=>c.scrollIntoView({behavior:'smooth',block:'nearest'}),80);}
+    // ===== TOGGLE CATEGORY =====
+    function toggleCat(id, btn) {
+        var c = document.getElementById(id);
+        var allB = document.querySelectorAll('.category-btn');
+        var allC = document.querySelectorAll('.items-container');
+
+        if (c.style.display === "block") {
+            c.style.display = "none";
+            btn.classList.remove('active');
+        } else {
+            allC.forEach(function(x) { x.style.display = 'none'; });
+            allB.forEach(function(x) { x.classList.remove('active'); });
+            c.style.display = "block";
+            btn.classList.add('active');
+            setTimeout(function() {
+                c.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 80);
+        }
     }
 
+    // ===== INIT =====
     updateCart();
 </script>
 </body>
