@@ -559,9 +559,10 @@
             z-index: 5;
         }
 
-        /* SCROLLABLE AREA INSIDE MODAL */
+        /* ★★★ KEY FIX: SCROLLABLE AREA INSIDE MODAL ★★★ */
         .modal-scroll-area {
             flex: 1;
+            min-height: 0;          /* ← THIS IS THE CRITICAL FIX */
             overflow-y: auto;
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
@@ -573,7 +574,6 @@
         .modal-scroll-area::-webkit-scrollbar-track { background: transparent; }
         .modal-scroll-area::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 2px; }
 
-        /* OLD SCROLLBAR STYLES NOW UNUSED ON modal-content */
         .modal-content h2 {
             color: var(--text-gold);
             margin-bottom: 22px;
@@ -1394,7 +1394,7 @@
                 <div class="deal-img-wrap">
                     <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=600&h=400&fit=crop&q=80" alt="BBQ Deal" loading="lazy">
                     <div class="deal-badge">Deal 1</div>
-                    <div class="deal-save-tag">Save 20%</div>
+                    <div class="deal-save-tag">Famous</div>
                 </div>
                 <div class="deal-content">
                     <div class="deal-title">BBQ Combo</div>
@@ -1535,7 +1535,7 @@
     <div class="modal-content">
         <span class="close-modal" onclick="closeCart()">&times;</span>
         <h2>🛒 Your Order</h2>
-        <div class="modal-scroll-area">
+        <div class="modal-scroll-area" id="modalScrollArea">
             <div id="cartItems"></div>
             <div class="cart-summary">
                 <div class="summary-line"><span>Subtotal:</span><span id="subtotal">Rs.0</span></div>
@@ -1546,11 +1546,11 @@
                 <div class="table-section-title"><i class="fas fa-chair"></i> Table Number <span class="required-star">*</span></div>
                 <div class="table-row">
                     <div class="table-box">
-                        <label>Indoors (S1–S19)</label>
+                        <label>Single (S1–S19)</label>
                         <select id="tableS"><option value="">-- Select --</option></select>
                     </div>
                     <div class="table-box">
-                        <label>Outdoors (F1–F20)</label>
+                        <label>Family (F1–F20)</label>
                         <select id="tableF"><option value="">-- Select --</option></select>
                     </div>
                 </div>
@@ -1669,7 +1669,7 @@
         document.getElementById('cartModal').style.display = 'block';
         displayCart();
         // Scroll modal scroll area to top
-        var scrollArea = document.querySelector('.modal-scroll-area');
+        var scrollArea = document.getElementById('modalScrollArea');
         if (scrollArea) scrollArea.scrollTop = 0;
     }
 
@@ -1686,24 +1686,40 @@
         }
     });
 
-    // ===== PREVENT SCROLL LEAK FROM MODAL =====
-    document.querySelector('.modal-scroll-area').addEventListener('touchmove', function(e) {
-        var el = this;
-        var isScrollable = el.scrollHeight > el.clientHeight;
-        if (!isScrollable) {
-            e.preventDefault();
-            return;
-        }
-        var scrollTop = el.scrollTop;
-        var scrollHeight = el.scrollHeight;
-        var clientHeight = el.clientHeight;
-        if (scrollTop <= 0 && e.touches[0].clientY > (e.touches[0].clientY + 1)) {
-            e.preventDefault();
-        }
-        if ((scrollTop + clientHeight) >= scrollHeight && e.touches[0].clientY < (e.touches[0].clientY - 1)) {
-            e.preventDefault();
-        }
-    }, { passive: false });
+    // ★★★ FIXED: PROPER TOUCH SCROLL HANDLER ★★★
+    (function() {
+        var scrollArea = document.getElementById('modalScrollArea');
+        var startY = 0;
+        var startScrollTop = 0;
+
+        scrollArea.addEventListener('touchstart', function(e) {
+            startY = e.touches[0].clientY;
+            startScrollTop = scrollArea.scrollTop;
+        }, { passive: true });
+
+        scrollArea.addEventListener('touchmove', function(e) {
+            var el = scrollArea;
+            var isScrollable = el.scrollHeight > el.clientHeight;
+
+            // If content doesn't need scrolling, block the touch to prevent background scroll
+            if (!isScrollable) {
+                e.preventDefault();
+                return;
+            }
+
+            // If at top and trying to scroll up, or at bottom and trying to scroll down, prevent
+            var currentY = e.touches[0].clientY;
+            var deltaY = currentY - startY;
+            var atTop = el.scrollTop <= 0;
+            var atBottom = (el.scrollTop + el.clientHeight) >= el.scrollHeight;
+
+            if (atTop && deltaY > 0) {
+                e.preventDefault();
+            } else if (atBottom && deltaY < 0) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+    })();
 
     // ===== DISPLAY CART =====
     function displayCart() {
